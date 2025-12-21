@@ -1,4 +1,13 @@
 
+# Install and run
+In order to install and run this project:
+* Clone the repo.
+* Run `npm install` in the terminal while in the repo's folder.
+* Run `npm run dev`.
+* Click the `localhost:` link. On my machine it is `http://localhost:5173/`. The number might be different on your machine.
+
+These are the standard actions you will need to perform for any project that uses Vite.
+
 # Minesweeper basics
 In standard minsweeper, a number tile counts the mines in the 8 tiles around. For this encryption method, we modify that. Consider each of the 8 ortho-diagonal directions that come out from a number. We will have the number see a random subset of the tiles in each of the direction, with a distance limit. For example, with a distance limit of 4, if we select 2 numbers frome each direction, the number will see 16 tiles.
 
