@@ -2,7 +2,7 @@
 import './shims/crypto-shim.js'
 import './shims/buffer-shim.js'
 import './shims/process-shim.js'
-import {mine} from './mine.js'
+import {hash_str} from './matrix.js'
 
 /** @type {HTMLInputElement} */
 const input_source_text = document.getElementById('source_text');
