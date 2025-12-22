@@ -51,8 +51,24 @@ export function make_random_key(length = 32){
  * @param {number} [keylen=32] the number of bytes to output;
  */
 export function hash(data, salt, keylen = 32){
+  // Derive key material synchronously using HMAC-SHA256 in counter mode.
+  // This is a portable, deterministic, one-way KDF that works with
+  // `crypto.createHmac` (supported by Node and crypto-browserify).
   const saltBuf = Buffer.isBuffer(salt) ? salt : Buffer.from(String(salt), 'utf8');
   const dataBuf = Buffer.from(String(data), 'utf8');
-  const out = crypto.scryptSync(dataBuf, saltBuf, keylen);
-  return out.toString('hex');
+
+  const hashLen = 32; // SHA-256 output length in bytes
+  const blocks = Math.ceil(keylen / hashLen);
+  const outBuf = Buffer.allocUnsafe(blocks * hashLen);
+
+  for (let i = 0; i < blocks; i++) {
+    const hmac = crypto.createHmac('sha256', saltBuf);
+    hmac.update(dataBuf);
+    // append counter byte
+    hmac.update(Buffer.from([i & 0xff]));
+    const digest = hmac.digest();
+    digest.copy(outBuf, i * hashLen);
+  }
+
+  return outBuf.slice(0, keylen).toString('hex');
 }
